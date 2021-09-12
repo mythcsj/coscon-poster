@@ -23,7 +23,7 @@
     </el-col>
     <el-col :span="8" class="poster-control" v-loading="isDownloading" element-loading-text="生成海报中">
       <el-row>
-        <h1>ApacheCon Asia 2021 海报生成器</h1>
+        <h1>COSCon 2021 海报生成器</h1>
         <el-radio-group size="small" v-model="lang">
           <el-radio-button label="zh"></el-radio-button>
           <el-radio-button label="en"></el-radio-button>

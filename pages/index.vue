@@ -16,7 +16,7 @@
           <div class="title">{{ title }}</div>
           <div class="name" :style="{'font-size': 3.7 * nameFontSize + 'vh'}">{{ name }}</div>
           <div class="topic" :style="{'font-size': 2.3 * topicFontSize + 'vh'}">{{ topic }}</div>
-          <div class="time">{{ time }}</div>
+<!--          <div class="time">{{ time }}</div>-->
           <img class="keynote" :src="'keynote-' + lang + '.png'" v-if="isKeynote">
         </div>
       </div>
@@ -24,10 +24,10 @@
     <el-col :span="8" class="poster-control" v-loading="isDownloading" element-loading-text="生成海报中">
       <el-row>
         <h1>COSCon 2021 海报生成器</h1>
-        <el-radio-group size="small" v-model="lang">
-          <el-radio-button label="zh"></el-radio-button>
-          <el-radio-button label="en"></el-radio-button>
-        </el-radio-group>
+<!--        <el-radio-group size="small" v-model="lang">-->
+<!--          <el-radio-button label="zh"></el-radio-button>-->
+<!--          <el-radio-button label="en"></el-radio-button>-->
+<!--        </el-radio-group>-->
       </el-row>
       <el-form>
         <el-form-item label="论坛名称" id="track">
@@ -68,12 +68,12 @@
           </el-col>
         </el-form-item>
         <el-form-item label="演讲题目">
-          <el-checkbox v-model="isKeynote">主题演讲</el-checkbox>
+<!--          <el-checkbox v-model="isKeynote">主题演讲</el-checkbox>-->
           <el-input v-model="topic" />
         </el-form-item>
-        <el-form-item label="演讲时间">
-          <el-input v-model="time" />
-        </el-form-item>
+<!--        <el-form-item label="演讲时间">-->
+<!--          <el-input v-model="time" />-->
+<!--        </el-form-item>-->
         <el-form-item label="字号调整（讲师姓名）">
           <div :span="12">
             <a href="javascript:;" @click="nameFontAdd()">
@@ -435,17 +435,17 @@ h1 {
 
       .author-img {
         position: absolute;
-        z-index: -10;
+        z-index: 999;
       }
 
       .title {
         font-weight: normal;
-        color: #FFE342;
+        color: #000;
       }
 
       .name {
         margin: 0 0 0.5vh 0;
-        color: #FFE342;
+        color: #000;
         font-family: 'SourceHanSerifSC', 'Open Sans';
         font-size: 3.7vh;
         font-weight: bold;
@@ -455,6 +455,7 @@ h1 {
         margin-bottom: 0.5vh;
         font-size: 2.3vh;
         font-weight: bold;
+        color: #000;
       }
 
       .time {

@@ -38,8 +38,7 @@ zh_type,zh_name,track,zh_title,zh_position,date
 中文演讲,代码家,开源商业,,,2021年10月30日
 中文演讲,陆佳华,开源硬件,FPGA的开源硬件实践体会,Xilinx高级经理,2021年10月30日
 中文演讲,张兆生,开源硬件,OPenharmony生态共建与全栈式使能,深圳中软国际科技服务有限公司CTO,2021年10月30日
-"中文演讲,Ted 洪尧泰,开源硬件,开源万物-从Fab Academy谈
-开源硬件教育,Fablab TaipeiFounder,2021年10月30日"
+中文演讲,Ted 洪尧泰,开源硬件,开源万物-从Fab Academy谈开源硬件教育,Fablab TaipeiFounder,2021年10月30日
 中文演讲,范益波,开源硬件,XK265:开源视频编解码硬件IP核,复旦大学教授,2021年10月30日
 中文演讲,Masafumi Ohta,开源硬件,Raspberry Pi use case studies: how to learn from the good practices.,Japanese Raspberry Pi Users GroupFounder and Representative,2021年10月30日
 中文演讲,王诗萱,开源硬件,创客玩开源,DFRobot 成都极趣科技有限公司应用组长,2021年10月30日
@@ -124,7 +123,7 @@ zh_type,zh_name,track,zh_title,zh_position,date
 中文演讲,曾毅,区块链,长安链：新一代企业级区块链装配工厂,腾讯云长安链基础组件负责人,2021年10月30日
 中文演讲,Rick Zhao,开源教育,开源教育与师徒制,青云科技软件研发工程师,2021年10月30日
 中文演讲,单家骏,云计算,腾讯百万级服务发现和治理实践,腾讯公司专家工程师,2021年10月30日
-中文演讲,Robert Yan,区块链,基于Rust的智能合约开发框架比较,NEAR Protocol工程师,2021年10月30日
+中文演讲,Robert Yan,区块开源硬件链,基于Rust的智能合约开发框架比较,NEAR Protocol工程师,2021年10月30日
 中文演讲,姚翔,区块链,前沿技术的协同研究,原语里弄发起人,2021年10月30日
 中文演讲,陈思达（三火）,区块链,使用Dapp-Learning学习DApp开发,Dapp-Learning核心贡献者,2021年10月30日
 中文演讲,陈莉君,开源操作系统,基于开源的系统软件人才培养探索与实践,西邮,2021年10月30日

@@ -412,7 +412,7 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style lang="scss">
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -439,72 +439,117 @@ h1 {
 }
 
 .poster-container {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
   font-family: 'Open Sans';
-}
 
-#poster-preview {
-  position: relative;
-  width: max-content;
-  height: 100vh;
-  overflow: hidden;
-  -webkit-user-select: none;
-  user-select: none;
-}
+  #poster-preview {
+    position: relative;
+    width: max-content;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
 
-.bg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
-  z-index: -20;
-}
+    .author-img {
+      position: absolute;
+      z-index: 999;
+    }
 
-.poster-template {
-  height: 100vh;
-}
+    .bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      z-index: -20;
+    }
 
-.poster-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 37vh 3vh 0 3vh;
-  text-align: center;
-  color: #fff;
-  font-size: 2vh;
-}
+    .poster-template {
+      height: 100vh;
+    }
 
-.author-img {
-  position: absolute;
-  z-index: 999;
-}
+    .poster-content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      padding: 37vh 3vh 0 3vh;
+      text-align: center;
+      color: #fff;
+      font-size: 2vh;
 
-.title {
-  font-weight: normal;
-  color: #000;
-}
+      .title {
+        font-weight: normal;
+        color: #000;
+      }
 
-.name {
-  margin: 0 0 0.5vh 0;
-  color: #000;
-  font-family: 'SourceHanSerifSC', 'Open Sans';
-  font-size: 3.7vh;
-  font-weight: bold;
-}
+      .name {
+        margin: 0 0 0.5vh 0;
+        color: #000;
+        font-family: 'SourceHanSerifSC', 'Open Sans';
+        font-size: 3.7vh;
+        font-weight: bold;
+      }
 
-.topic {
-  margin-bottom: 0.5vh;
-  font-size: 2.3vh;
-  font-weight: bold;
-  color: #000;
+      .topic {
+        margin-bottom: 0.5vh;
+        font-size: 2.3vh;
+        font-weight: bold;
+        color: #000;
+      }
+
+      .keynote {
+        display: block;
+        margin: 0.5vh auto;
+        height: 5vh;
+      }
+    }
+  }
+
+  .poster-control {
+    .el-form-item {
+      margin-bottom: 5px;
+
+      &#track {
+        margin-top: 10px;
+      }
+
+      .icon-panel {
+        margin-top: 12px;
+      }
+
+      .avatar-icon {
+        font-size: 22px;
+        color: #ccc;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+
+      .avatar-uploader {
+        display: inline-block;
+        margin-top: 10px;
+        width: 40px;
+        height: 40px;
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .avatar-uploader:hover {
+        border-color: #409eff;
+      }
+    }
+
+    .info,
+    .info a {
+      color: #aaa;
+    }
+  }
 }
 
 .time {
@@ -512,62 +557,14 @@ h1 {
   color: #ccc;
 }
 
-.keynote {
-  display: block;
-  margin: 0.5vh auto;
-  height: 5vh;
-}
+// .el-upload:hover .avatar-icon,
+// a:hover .avatar-icon {
+//   color: #409eff;
+// }
 
-.el-form-item {
-  margin-bottom: 5px;
-}
-
-#track {
-  margin-top: 10px;
-}
-
-.avatar-uploader {
-  display: inline-block;
-  margin-top: 10px;
-  width: 40px;
-  height: 40px;
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader:hover {
-  border-color: #409eff;
-}
-
-.avatar-icon {
-  font-size: 22px;
-  color: #ccc;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-}
-
-.icon-panel {
-  margin-top: 12px;
-}
-
-.el-upload:hover .avatar-icon,
-a:hover .avatar-icon {
-  color: #409eff;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  display: block;
-}
-
-.info,
-.info a {
-  color: #aaa;
-}
+// .avatar {
+//   width: 40px;
+//   height: 40px;
+//   display: block;
+// }
 </style>

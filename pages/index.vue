@@ -1,223 +1,154 @@
 <template>
-  <el-row type="flex" class="poster-container" justify="center">
-    <el-col :span="12">
-      <div
-        id="poster-preview"
-        :style="{ cursor: imageUrl ? 'move' : 'default' }"
-        @mousedown="mouseDown($event)"
-        @mousemove="mouseMove($event)"
-        @mouseup="mouseUp($event)"
-      >
-        <img
-          v-if="imageUrl"
-          ref="avatar"
-          class="author-img"
-          :src="imageUrl"
-          :style="{
-            width: avatarPos.width + 'vh',
-            height: avatarPos.height + 'vh',
-            left: avatarPos.left + 'vh',
-            top: avatarPos.top + 'vh',
-          }"
-        />
-        <div class="bg"></div>
-        <img
-          class="poster-template"
-          :src="'poster-template-' + lang + '.png'"
-        />
-        <div class="poster-content">
-          <div class="title">{{ title }}</div>
-          <div class="name" :style="{ 'font-size': 3.7 * nameFontSize + 'vh' }">
-            {{ name }}
+  <div class="root">
+    <div class="poster-container">
+      <div class="poster-control">
+        <h1>COSCon 2021 海报生成器</h1>
+        <el-form>
+          <el-tabs>
+            <el-tab-pane label="论坛信息">
+              <el-form-item id="track" label="论坛名称">
+                <el-input v-model="forumName" />
+              </el-form-item>
+              <el-form-item label="论坛口号"
+                ><el-input v-model="forumSlogon"
+              /></el-form-item>
+              <el-form-item label="论坛详情"
+                ><el-input v-model="forumDetail"
+              /></el-form-item>
+            </el-tab-pane>
+
+            <el-tab-pane label="成员信息">
+              <el-form-item
+                label="成员照片（虽支持自动缩放，建议最好使用类方形照片，以达最好效果）"
+              >
+                <el-upload
+                  action="#"
+                  :show-file-list="false"
+                  :on-success="updateAvatarSuccess"
+                >
+                  <img
+                    v-if="memberAvatarUrl"
+                    :src="memberAvatarUrl"
+                    class="member-avatar-uploader"
+                  />
+                  <i v-else class="el-icon-plus member-avatar-uploader"></i>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="成员角色"
+                ><el-input v-model="memberRole"
+              /></el-form-item>
+              <el-form-item label="成员姓名">
+                <el-input v-model="memberName" />
+              </el-form-item>
+            </el-tab-pane>
+
+            <el-tab-pane label="演讲信息">
+              <el-form-item label="演讲标题">
+                <el-input v-model="topicTitle" />
+              </el-form-item>
+              <el-form-item label="演讲口号">
+                <el-input v-model="topicSlogon" />
+              </el-form-item>
+              <el-form-item label="演讲内容（支持md语法）">
+                <el-input v-model="topicDetail" autosize type="textarea" />
+              </el-form-item>
+            </el-tab-pane>
+
+            <el-tab-pane label="报名信息">
+              <el-form-item label="报名链接（请输入url自动生成报名二维码）"
+                ><el-input v-model="qr"
+              /></el-form-item>
+            </el-tab-pane>
+
+            <el-form-item>
+              <el-button
+                v-loading.fullscreen.lock="isDownloading"
+                element-loading-text="生成海报中"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+                type="primary"
+                @click="download()"
+              >
+                生成海报
+              </el-button>
+            </el-form-item>
+          </el-tabs>
+        </el-form>
+      </div>
+      <div id="poster-preview">
+        <div class="header">
+          <div class="forum-banner">
+            <h1 class="forum-name">{{ forumName }}</h1>
+            <h2 class="forum-slogon">{{ forumSlogon }}</h2>
+            <small class="forum-detail">{{ forumDetail }}</small>
           </div>
-          <div
-            class="topic"
-            :style="{ 'font-size': 2.3 * topicFontSize + 'vh' }"
-          >
-            {{ topic }}
-          </div>
-          <!--          <div class="time">{{ time }}</div>-->
+          <div class="logo"></div>
+        </div>
+        <div class="content">
           <img
-            v-if="isKeynote"
-            class="keynote"
-            :src="'keynote-' + lang + '.png'"
+            v-if="memberAvatarUrl"
+            class="member-avatar"
+            :src="memberAvatarUrl"
           />
+          <div v-else class="member-avatar"></div>
+          <h2 class="member-role">{{ memberRole }}</h2>
+          <h1 class="member-name">{{ memberName }}</h1>
+          <h2 class="topic-title">{{ topicTitle }}</h2>
+          <h2 class="topic-slogon">{{ topicSlogon }}</h2>
+          <div class="topic-detail" v-html="getMd"></div>
+        </div>
+        <div class="footer">
+          <img v-if="getQr" :src="getQr" />
+          <small>扫描二维码报名参会</small>
         </div>
       </div>
-    </el-col>
-    <el-col
-      v-loading="isDownloading"
-      :span="8"
-      class="poster-control"
-      element-loading-text="生成海报中"
-    >
-      <el-row>
-        <h1>COSCon 2021 海报生成器</h1>
-        <!--        <el-radio-group size="small" v-model="lang">-->
-        <!--          <el-radio-button label="zh"></el-radio-button>-->
-        <!--          <el-radio-button label="en"></el-radio-button>-->
-        <!--        </el-radio-group>-->
-      </el-row>
-      <el-form>
-        <el-form-item id="track" label="论坛名称">
-          <el-autocomplete
-            v-model="track"
-            :fetch-suggestions="trackQuery"
-          ></el-autocomplete>
-        </el-form-item>
-        <el-form-item label="讲师姓名">
-          <el-autocomplete
-            v-model="name"
-            :fetch-suggestions="nameQuery"
-            @select="nameSelect"
-          ></el-autocomplete>
-        </el-form-item>
-        <el-form-item label="讲师职位">
-          <el-input v-model="title" />
-        </el-form-item>
-        <el-form-item
-          :label="'讲师照片' + (imageUrl ? '（可在海报中拖动）' : '')"
+    </div>
+    <div class="copy-right">
+      <small>
+        <i class="el-icon-service"></i> 本工具由
+        <a href="http://github.com/Ovilia">@Ovilia</a> 开发，<a
+          href="http://github.com/dz85"
+          >@David Z.</a
         >
-          <el-col :span="3">
-            <input
-              ref="avatarInput"
-              type="file"
-              style="display: none"
-              @change="avatarChange"
-            />
-            <a class="avatar-uploader" href="javascript:;" @click="setAvatar()">
-              <i class="el-icon-plus avatar-icon"></i>
-            </a>
-          </el-col>
-          <el-col :span="9" class="icon-panel">
-            <a href="javascript:;" @click="zoomIn()">
-              <i v-if="imageUrl" class="el-icon-zoom-in avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="zoomOut()">
-              <i v-if="imageUrl" class="el-icon-zoom-out avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="zoomReset()">
-              <i v-if="imageUrl" class="el-icon-refresh-left avatar-icon"></i>
-            </a>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="演讲题目">
-          <!--          <el-checkbox v-model="isKeynote">主题演讲</el-checkbox>-->
-          <el-input v-model="topic" />
-        </el-form-item>
-        <!--        <el-form-item label="演讲时间">-->
-        <!--          <el-input v-model="time" />-->
-        <!--        </el-form-item>-->
-        <el-form-item label="字号调整（讲师姓名）">
-          <div :span="12">
-            <a href="javascript:;" @click="nameFontAdd()">
-              <i class="el-icon-zoom-in avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="nameFontMinus()">
-              <i class="el-icon-zoom-out avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="nameFontReset()">
-              <i class="el-icon-refresh-left avatar-icon"></i>
-            </a>
-          </div>
-        </el-form-item>
-        <el-form-item label="字号调整（演讲题目）">
-          <div :span="12">
-            <a href="javascript:;" @click="topicFontAdd()">
-              <i class="el-icon-zoom-in avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="topicFontMinus()">
-              <i class="el-icon-zoom-out avatar-icon"></i>
-            </a>
-            <a href="javascript:;" @click="topicFontReset()">
-              <i class="el-icon-refresh-left avatar-icon"></i>
-            </a>
-          </div>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="download()"> 生成海报 </el-button>
-        </el-form-item>
-
-        <el-form-item class="info">
-          <i class="el-icon-service"></i> 本工具由
-          <a href="http://github.com/Ovilia">@Ovilia</a> 开发，<a
-            href="mailto:oviliazhang@gmail.com"
-            >问题反馈</a
-          >
-        </el-form-item>
-      </el-form>
-    </el-col>
-  </el-row>
+        重构/修改，<a href="mailto:geek@lzw.name">问题反馈</a>
+      </small>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
+import AsyncComputed from 'vue-async-computed'
 import domtoimage from 'retina-dom-to-image'
-import trackZhRaw from './data/track-zh'
-import trackEnRaw from './data/track-en'
-import trackKeyRaw from './data/track-keynote'
+import qrcode from 'qrcode'
+import MarkdownIt from 'markdown-it'
 
-type SpeechInfo = {
-  track: string
-  title: string
-  name: string
-  topic: string
-  time: string
-  isKeynote: boolean
-}
+import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
 
-const trackKey = trackKeyRaw
-  .split('\n')
-  .slice(2)
-  .filter((line) => !!line)
-
-function getTrackInfo(raw: string, isZh: boolean): SpeechInfo[] {
-  let infos = raw
-    .split('\n')
-    .slice(2)
-    .filter((line) => !!line)
-    .map((line) => {
-      const arr = line.split(',')
-      return {
-        track: arr[2],
-        title: arr[4],
-        name: arr[1],
-        topic: arr[3],
-        time: arr[5],
-        isKeynote: false,
-      }
-    })
-
-  // add keynote
-  infos = infos.concat(
-    trackKey
-      .filter((line) => {
-        return isZh === /[\u4E00-\u9FA5]/.test(line)
-      })
-      .map((line) => {
-        const arr = line.split(',')
-        return {
-          track: arr[0],
-          title: arr[2],
-          name: arr[1],
-          topic: arr[3],
-          time: arr[4],
-          isKeynote: true,
-        }
-      })
-  )
-
-  return infos
-}
-
-const trackZh = getTrackInfo(trackZhRaw, true)
-const trackEn = getTrackInfo(trackEnRaw, false)
+Vue.use(AsyncComputed)
 
 export default Vue.extend({
   data() {
     return {
+      forumName: '2021中国开源年会',
+      forumSlogon: 'Happy Hacking',
+      forumDetail: '10月30日 - 10月31日 成都·北京·上海·线上',
+      memberAvatarUrl: '',
+      memberRole: '开源社2021届成员',
+      memberName: '姓名',
+      topicTitle: '这是一个很神秘的主题',
+      topicSlogon: '开源社邀请您来一起开心快乐开源',
+      topicDetail: `## 大会论坛
+Keynote 主题演讲、人工智能、区块链、云计算、大数据
+开源硬件、操作系统、Web 应用开发、开源教育、开源治理
+女性论坛、开源百宝箱、开源公益、开源社区、开源文化
+开源商业
+
+## 社区活动
+城市聚会、特色活动、开源·真·黑客马拉松、开源市集
+汉服主题、小吃走廊、开源读书会、人找事事找人
+`,
+      qr: 'https://www.bagevent.com/event/7685233',
+
       track: '',
       imageUrl: null as unknown as string,
       title: '',
@@ -253,160 +184,45 @@ export default Vue.extend({
     }
   },
 
+  computed: {
+    getMd(): string {
+      const md = new MarkdownIt()
+      return md.render(this.topicDetail)
+    },
+  },
+
+  asyncComputed: {
+    async getQr(): Promise<string> {
+      if (this.qr === '') return ''
+
+      const dataURL = await qrcode.toDataURL(this.qr)
+      return dataURL
+    },
+  },
+
   mounted() {},
 
   methods: {
-    trackQuery(str: string, cb: Function) {
-      const trackInfos = this.lang === 'zh' ? trackZh : trackEn
-      const result = str
-        ? trackInfos.filter((info) => info.track === str)
-        : trackInfos
-      const distinct = result
-        .map((info) => info.track)
-        .filter((track, index, self) => self.indexOf(track) === index)
-      cb(
-        distinct.map((track) => {
-          return { value: track }
-        })
-      )
+    updateAvatarSuccess(_response: any, file: ElUploadInternalFileDetail) {
+      if (!file) return
+
+      if (this.memberAvatarUrl !== '') URL.revokeObjectURL(this.memberAvatarUrl)
+
+      this.memberAvatarUrl = URL.createObjectURL(file.raw)
     },
 
-    nameQuery(str: string, cb: Function) {
-      const trackInfos = this.lang === 'zh' ? trackZh : trackEn
-      const result = str
-        ? trackInfos.filter((info) => info.name === str)
-        : trackInfos.filter((info) => info.track === this.track)
-      cb(
-        result.map((track) => {
-          return {
-            value: track.name,
-            track,
-          }
-        })
-      )
-    },
-
-    nameSelect(item: { track: SpeechInfo; value: string }) {
-      this.topic = item.track.topic
-      this.time = item.track.time
-      this.title = item.track.title
-      this.isKeynote = item.track.isKeynote
-      this.nameFontReset()
-      this.topicFontReset()
-    },
-
-    download() {
+    async download() {
       this.isDownloading = true
-      domtoimage
-        .toJpeg(document.getElementById('poster-preview'))
-        .then((url: string) => {
-          this.posterBase64 = url
-          this.isDownloading = false
-          const link = document.createElement('a')
-          link.href = url
-          link.download = this.name + '.jpeg'
-          link.click()
-        })
-    },
+      const url = await domtoimage.toJpeg(
+        document.getElementById('poster-preview')
+      )
 
-    mouseDown(event: MouseEvent) {
-      if (!this.imageUrl) {
-        return
-      }
-      this.isMouseDown = true
-      this.mouseX = event.pageX
-      this.mouseY = event.pageY
-    },
-
-    mouseMove(event: MouseEvent) {
-      if (!this.isMouseDown) {
-        return
-      }
-      const ratio = 100 / window.innerHeight
-
-      this.avatarPos.left += (event.pageX - this.mouseX) * ratio
-      this.avatarPos.top += (event.pageY - this.mouseY) * ratio
-      this.mouseX = event.pageX
-      this.mouseY = event.pageY
-    },
-
-    mouseUp(event: MouseEvent) {
-      this.isMouseDown = false
-    },
-
-    zoomIn() {
-      this.avatarZoom += 0.05
-      this.avatarPos.width = this.avatarDefaultPos.width * this.avatarZoom
-      this.avatarPos.height = this.avatarDefaultPos.height * this.avatarZoom
-    },
-
-    zoomOut() {
-      this.avatarZoom -= 0.05
-      this.avatarPos.width = this.avatarDefaultPos.width * this.avatarZoom
-      this.avatarPos.height = this.avatarDefaultPos.height * this.avatarZoom
-    },
-
-    zoomReset() {
-      this.avatarZoom = 1
-      this.avatarPos.width = this.avatarDefaultPos.width
-      this.avatarPos.height = this.avatarDefaultPos.height
-      this.avatarPos.left = this.avatarDefaultPos.left
-      this.avatarPos.top = this.avatarDefaultPos.top
-    },
-
-    nameFontAdd() {
-      this.nameFontSize += 0.1
-    },
-
-    nameFontMinus() {
-      this.nameFontSize -= 0.1
-    },
-
-    nameFontReset() {
-      this.nameFontSize = 1
-    },
-
-    topicFontAdd() {
-      this.topicFontSize += 0.1
-    },
-
-    topicFontMinus() {
-      this.topicFontSize -= 0.1
-    },
-
-    topicFontReset() {
-      this.topicFontSize = 1
-    },
-
-    setAvatar() {
-      if (this.$refs.avatarInput) {
-        ;(this.$refs.avatarInput as HTMLElement).click()
-      }
-    },
-
-    // @ts-ignore
-    avatarChange(event) {
-      const file =
-        event.target.files && event.target.files.length
-          ? event.target.files[0]
-          : null
-      if (file) {
-        this.imageUrl = window.URL.createObjectURL(file)
-
-        const img = new Image()
-        img.onload = () => {
-          const h = (417 * 100) / 2208
-          const w = (h / img.height) * img.width
-          const top = (373 / 2208) * 100
-          const pw = (100 / 2208) * 1242
-          const left = (pw - w) / 2
-          this.avatarDefaultPos.width = this.avatarPos.width = w
-          this.avatarDefaultPos.height = this.avatarPos.height = h
-          this.avatarDefaultPos.left = this.avatarPos.left = left
-          this.avatarDefaultPos.top = this.avatarPos.top = top
-        }
-        img.src = this.imageUrl
-      }
+      this.posterBase64 = url
+      this.isDownloading = false
+      const link = document.createElement('a')
+      link.href = url
+      link.download = this.memberName + '.jpg'
+      link.click()
     },
   },
 })
@@ -428,143 +244,234 @@ export default Vue.extend({
 @font-face {
   font-family: 'SourceHanSerifSC';
   font-style: normal;
-  font-weight: 300;
+  font-weight: bold;
   src: url(~assets/SourceHanSerifSC-Heavy.otf) format('opentype');
 }
 
 h1 {
-  margin-bottom: 15px;
-  font-size: 20px;
-  font-family: 'SourceHanSerifSC', 'Open Sans';
+  display: block;
+  margin-block-start: 0.3em;
+  margin-block-end: 0.3em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 1.8em;
+  font-weight: bold;
 }
 
-.poster-container {
-  font-family: 'Open Sans';
+h2 {
+  display: block;
+  margin-block-start: 0.25em;
+  margin-block-end: 0.25em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 1.5em;
+  font-weight: normal;
+}
 
-  #poster-preview {
-    position: relative;
-    width: max-content;
-    height: 100vh;
-    overflow: hidden;
-    -webkit-user-select: none;
-    user-select: none;
+small {
+  display: block;
+  margin-block-start: 0.1em;
+  margin-block-end: 0.1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 0.6em;
+  font-weight: bold;
+}
 
-    .author-img {
-      position: absolute;
-      z-index: 999;
+p {
+  display: block;
+  margin-block-start: 0em;
+  margin-block-end: 1.5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 0.8em;
+}
+
+@mixin justify {
+  text-align: justify;
+  text-align-last: justify;
+  text-justify: inter-ideograph;
+}
+
+.root {
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .poster-container {
+    font-family: 'Open Sans';
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // flex-wrap: wrap;
+
+    .poster-control {
+      min-width: 600px;
+      .el-upload {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px dashed #888;
+        border-radius: 6px;
+        .member-avatar-uploader {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          &:hover {
+            border-color: #409eff;
+          }
+        }
+      }
     }
 
-    .bg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      background: white;
-      z-index: -20;
-    }
-
-    .poster-template {
-      height: 100vh;
-    }
-
-    .poster-content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      padding: 37vh 3vh 0 3vh;
+    #poster-preview {
+      // width: 638px;
+      // width: 100vw;
+      width: 600px;
+      min-width: 600px;
+      max-width: 600px;
+      height: calc(600px * 1334px / 750px);
+      // height: 1067.2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 2.5em;
+      background: url(~assets/bg.png) no-repeat;
+      background-size: contain;
       text-align: center;
-      color: #fff;
-      font-size: 2vh;
+      box-sizing: border-box;
 
-      .title {
-        font-weight: normal;
-        color: #000;
+      .header,
+      .footer {
+        font-size: 1em;
+        height: 15%;
+        display: flex;
       }
 
-      .name {
-        margin: 0 0 0.5vh 0;
-        color: #000;
-        font-family: 'SourceHanSerifSC', 'Open Sans';
-        font-size: 3.7vh;
-        font-weight: bold;
-      }
+      .header {
+        font-size: 1em;
+        justify-content: space-between;
+        align-items: stretch;
+        border-bottom: 1px dashed black;
 
-      .topic {
-        margin-bottom: 0.5vh;
-        font-size: 2.3vh;
-        font-weight: bold;
-        color: #000;
-      }
+        .forum-banner {
+          font-size: 1em;
+          width: 55%;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: stretch;
 
-      .keynote {
-        display: block;
-        margin: 0.5vh auto;
-        height: 5vh;
+          .forum-name,
+          .forum-slogon,
+          .forum-detail {
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+          }
+
+          .forum-name {
+            @include justify();
+          }
+
+          .forum-slogon {
+            background: black;
+            color: #ffc600;
+            text-transform: uppercase;
+            font-weight: bold;
+          }
+
+          .forum-detail {
+            @include justify();
+          }
+        }
+
+        .logo {
+          font-size: 1em;
+          width: 25%;
+          background: url(~assets/logo.png) top no-repeat;
+          background-size: contain;
+        }
+      }
+      .footer {
+        font-size: 1em;
+        border-top: 1px dashed black;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+
+        img {
+          font-size: 1em;
+          width: 20%;
+          height: auto;
+        }
+      }
+      .content {
+        font-size: 1em;
+        height: 60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        .member-avatar-mask,
+        .member-avatar {
+          font-size: 1em;
+          width: 128px;
+          height: 128px;
+          // max-width: 128px;
+          border: 0.3em solid #ff7353;
+          border-radius: 50%;
+          background: #ffa91b;
+          object-fit: cover;
+
+          // &:after {
+          //   font-size: 1em;
+          //   content: '';
+          //   display: block;
+          //   padding-top: 100%;
+          // }
+        }
+
+        .topic-slogon {
+          width: 100%;
+          color: white;
+          background: black;
+        }
+
+        .topic-detail {
+          font-size: 1em;
+          width: 100%;
+          text-align: left;
+        }
       }
     }
   }
 
-  .poster-control {
-    .el-form-item {
-      margin-bottom: 5px;
+  .copy-right {
+    border-top: 1px dashed gray;
+    margin: 10px 0;
+    text-align: center;
 
-      &#track {
-        margin-top: 10px;
-      }
-
-      .icon-panel {
-        margin-top: 12px;
-      }
-
-      .avatar-icon {
-        font-size: 22px;
-        color: #ccc;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-      }
-
-      .avatar-uploader {
-        display: inline-block;
-        margin-top: 10px;
-        width: 40px;
-        height: 40px;
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .avatar-uploader:hover {
-        border-color: #409eff;
-      }
-    }
-
-    .info,
-    .info a {
+    color: #aaa;
+    a {
       color: #aaa;
     }
   }
 }
 
-.time {
-  font-size: 2vh;
-  color: #ccc;
-}
-
-// .el-upload:hover .avatar-icon,
-// a:hover .avatar-icon {
-//   color: #409eff;
-// }
-
-// .avatar {
-//   width: 40px;
-//   height: 40px;
-//   display: block;
+// @media screen and (min-width: 600px) {
+//   .root {
+//     .poster-container {
+//       flex-direction: row;
+//       align-items: stretch;
+//     }
+//   }
 // }
 </style>

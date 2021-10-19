@@ -34,50 +34,25 @@ This repo uses [NuxtJS](https://nuxtjs.org/).
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
 
-### Special Directories
+## 需求
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+就是在最开始添加一个身份类别，如讲师、出品人、志愿者、组委会、赞助伙伴、媒体伙伴、社区伙伴... (可以下拉菜单选择或自行填写)...
 
-#### `assets`
+如果是讲师身份，那就是现在海报的内容，如分论坛、演讲题目...
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+如果是出品人、志愿者、组委会成员、赞助伙伴、媒体伙伴、社区伙伴...等，就不必再填写演讲信息了
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+## 2021.10.20
 
-#### `components`
+Done
+1. 彻底拆分原海报模版，使所有文字、图标、背景均易于定制；
+2. 抛弃人像照可调整位置的体验设计（该设计在移动端存在bug），强制需上传正方形人像照，简化用户体验；
+3. 将表单用标签页进行管理，用户操作一目了然；
+4. 演讲内容支持markdown语法；
+5. 添加根据url自动生成二维码的功能；
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+To do
+1. 由于em体系存在问题，海报自适应系统不能正常运作，暂时固定海报长宽；该设计不影响当前用户体验，是否要实现待定；
+2. 当输入多行内容的时候，暂未实现根据容器自动调整字体；该设计不影响当前用户体验，是否要实现待定；
+3. 原海报生成算法使用第三方库，该库性能还有改进空间（目前速度略慢）；该设计不影响当前用户体验，是否要实现待定；
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-#### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-#### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-#### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-#### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-#### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).

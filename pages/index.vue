@@ -1,7 +1,12 @@
 <template>
   <div class="root">
     <div class="poster-container">
-      <div class="poster-control">
+      <div
+        v-loading="isDownloading"
+        class="poster-control"
+        element-loading-text="生成海报中"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+      >
         <h1>COSCon 2021 海报生成器（版本：{{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
@@ -63,13 +68,7 @@
             </el-tab-pane>
 
             <el-form-item>
-              <el-button
-                v-loading.fullscreen.lock="isDownloading"
-                element-loading-text="生成海报中"
-                element-loading-background="rgba(0, 0, 0, 0.8)"
-                type="primary"
-                @click="download()"
-              >
+              <el-button type="primary" @click="download()">
                 生成海报
               </el-button>
             </el-form-item>

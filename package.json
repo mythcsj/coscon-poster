@@ -8,7 +8,7 @@
     "start": "nuxt start",
     "docs:clean": "rm -rf docs/",
     "docs:restore": "npm run docs:clean && git restore docs/",
-    "generate": "npm run docs:clean && nuxt generate && git add docs/ && git commit -m '[generate]docs'"
+    "generate": "ts-node ./scripts/version.ts && npm run docs:clean && nuxt generate && git add ./docs/ ./version.json && git commit -m '[generate]docs'"
   },
   "dependencies": {
     "core-js": "^3.15.1",
@@ -24,13 +24,17 @@
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@types/markdown-it": "^12.2.3",
+    "@types/node": "^16.11.1",
     "@types/qrcode": "^1.4.1",
+    "@types/semver": "^7.3.9",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "fibers": "^5.0.0",
     "prettier": "^2.3.2",
     "prettier-eslint": "^13.0.0",
     "rimraf": "^3.0.2",
-    "sass": "^1.43.2"
+    "sass": "^1.43.2",
+    "semver": "^7.3.5",
+    "ts-node": "^10.3.0"
   }
 }

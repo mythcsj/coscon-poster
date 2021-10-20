@@ -2,7 +2,7 @@
   <div class="root">
     <div class="poster-container">
       <div class="poster-control">
-        <h1>COSCon 2021 海报生成器</h1>
+        <h1>COSCon 2021 海报生成器（版本：{{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
             <el-tab-pane label="论坛信息">
@@ -125,6 +125,7 @@ import qrcode from 'qrcode'
 import MarkdownIt from 'markdown-it'
 
 import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
+import v from '../version.json'
 
 Vue.use(AsyncComputed)
 
@@ -187,6 +188,10 @@ Keynote 主题演讲、人工智能、区块链、云计算、大数据
   },
 
   computed: {
+    getVersion(): string {
+      return v.version
+    },
+
     getMd(): string {
       const md = new MarkdownIt()
       return md.render(this.topicDetail)

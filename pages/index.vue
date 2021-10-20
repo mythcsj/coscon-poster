@@ -126,6 +126,8 @@ import MarkdownIt from 'markdown-it'
 import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
 import v from '../version.json'
 
+const URL = window.URL || window.webkitURL
+
 Vue.use(AsyncComputed)
 
 export default Vue.extend({
@@ -223,12 +225,17 @@ Keynote 主题演讲、人工智能、区块链、云计算、大数据
         document.getElementById('poster-preview')
       )
 
-      this.posterBase64 = url
+      const downloadLink = document.createElement('a')
+      downloadLink.href = url
+      /**
+       * chromium bug:
+       *    detail: https://bugs.chromium.org/p/chromium/issues/detail?id=375634
+       *    status: WontFix
+       *    相关： https://html.spec.whatwg.org/multipage/links.html#downloading-resources
+       */
+      downloadLink.download = `${this.memberName}.jpg`
+      downloadLink.click()
       this.isDownloading = false
-      const link = document.createElement('a')
-      link.href = url
-      link.download = this.memberName + '.jpg'
-      link.click()
     },
   },
 })

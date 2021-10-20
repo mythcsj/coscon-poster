@@ -24,7 +24,9 @@
                 <el-upload
                   action="#"
                   :show-file-list="false"
-                  :on-success="updateAvatarSuccess"
+                  :on-change="updateAvatar"
+                  :auto-upload="false"
+                  accept="image/*"
                 >
                   <img
                     v-if="memberAvatarUrl"
@@ -203,7 +205,7 @@ Keynote 主题演讲、人工智能、区块链、云计算、大数据
   mounted() {},
 
   methods: {
-    updateAvatarSuccess(_response: any, file: ElUploadInternalFileDetail) {
+    updateAvatar(file: ElUploadInternalFileDetail) {
       if (!file) return
 
       if (this.memberAvatarUrl !== '') URL.revokeObjectURL(this.memberAvatarUrl)

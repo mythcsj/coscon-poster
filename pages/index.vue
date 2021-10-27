@@ -119,11 +119,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import AsyncComputed from 'vue-async-computed'
-import domtoimage from 'retina-dom-to-image'
 import qrcode from 'qrcode'
 import MarkdownIt from 'markdown-it'
-
 import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
+
+import dom2image from '../lib/dom2image'
 import v from '../version.json'
 
 const URL = window.URL || window.webkitURL
@@ -142,14 +142,10 @@ export default Vue.extend({
       topicTitle: '这是一个很神秘的主题',
       topicSlogon: '开源社邀请您来一起开心快乐开源',
       topicDetail: `## 大会论坛
-Keynote 主题演讲、人工智能、区块链、云计算、大数据
-开源硬件、操作系统、Web 应用开发、开源教育、开源治理
-女性论坛、开源百宝箱、开源公益、开源社区、开源文化
-开源商业
+Keynote 主题演讲、人工智能、区块链、云计算、大数据、开源硬件、操作系统、Web 应用开发、开源教育、开源治理、女性论坛、开源百宝箱、开源公益、开源社区、开源文化、开源商业
 
 ## 社区活动
-城市聚会、特色活动、开源·真·黑客马拉松、开源市集
-汉服主题、小吃走廊、开源读书会、人找事事找人
+城市聚会、特色活动、开源·真·黑客马拉松、开源市集、汉服主题、小吃走廊、开源读书会、人找事事找人
 `,
       qr: 'https://www.bagevent.com/event/7685233',
 
@@ -211,22 +207,26 @@ Keynote 主题演讲、人工智能、区块链、云计算、大数据
   mounted() {},
 
   methods: {
-    updateAvatar(file: ElUploadInternalFileDetail) {
+    async updateAvatar(file: ElUploadInternalFileDetail) {
       if (!file) return
 
-      if (this.memberAvatarUrl !== '') URL.revokeObjectURL(this.memberAvatarUrl)
-
-      this.memberAvatarUrl = URL.createObjectURL(file.raw)
+      this.memberAvatarUrl = (await dom2image.promises.blob2DataURL(
+        file.raw
+      )) as unknown as string
     },
 
     async download() {
       this.isDownloading = true
-      const url = await domtoimage.toJpeg(
-        document.getElementById('poster-preview')
+      const preview = document.getElementById('poster-preview')
+      const dataURL = await dom2image.dom2Png(
+        preview,
+        preview?.clientWidth,
+        preview?.clientHeight
       )
+      if (!dataURL) return
 
       const downloadLink = document.createElement('a')
-      downloadLink.href = url
+      downloadLink.href = dataURL
       /**
        * chromium bug:
        *    detail: https://bugs.chromium.org/p/chromium/issues/detail?id=375634

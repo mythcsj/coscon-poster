@@ -20,5 +20,5 @@ jobs:
               with:
                   publish_dir: ./docs
                   # cname: ideapp.dev
-                  personal_token: ${{ secrets.GITHUB_TOKEN }}
+                  personal_token: ${{ secrets.OSB_TOKEN }}
                   force_orphan: true

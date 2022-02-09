@@ -393,7 +393,7 @@ p {
           }
 
           .forum-slogon {
-            background: black;
+            background: #266481;
             color: #ffc600;
             text-transform: uppercase;
             font-weight: bold;

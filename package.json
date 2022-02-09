@@ -9,7 +9,7 @@
     "docs:clean": "rm -rf docs/",
     "docs:restore": "npm run docs:clean && git restore docs/",
     "generate": "ts-node ./scripts/version.ts && npm run docs:clean && nuxt generate && git add ./docs/ ./version.json && git commit -m '[generate]docs'",
-    "generate2": "ts-node ./scripts/version.ts && nuxt generate && git add ./docs/ ./version.json && git commit -m '[generate]docs'"
+    "generate2": "ts-node ./scripts/version.ts && nuxt generate "
   },
   "dependencies": {
     "core-js": "^3.15.1",

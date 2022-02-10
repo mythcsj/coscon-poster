@@ -99,7 +99,7 @@
         </div>
         <div class="footer">
           <img v-if="getQr" :src="getQr" />
-          <small>扫描二维码报名参会</small>
+          <small v-if="getQr" >扫描二维码报名参会</small>
         </div>
       </div>
     </div>
@@ -141,7 +141,7 @@ export default Vue.extend({
       topicTitle: '这是一个很神秘的主题',
       topicSlogon: '开源市集邀请您来一起共创',
       topicDetail: `## 开源市集
-学生科创项目展示、惩罚十块诗社、Emotional交互艺术展、Web 原生组件引擎 WebCell、freeCodeCamp、极狐 GitLab等宝藏展位
+学生科创项目展示、开源软硬件项目展、学生科创项目展、Emotional 交互艺术展、音乐表演和互动、诗社作品展、播客访谈、开放麦克风、开缘树下你和我
 
 ## 社区活动
 城市聚会、特色活动、开源·真·黑客马拉松、开源市集
@@ -216,6 +216,17 @@ export default Vue.extend({
     },
 
     async download() {
+
+      if(!this.memberAvatarUrl){
+        alert('请上传头像');
+        return;
+      }
+
+      if(this.memberName == '姓名'){
+        alert('请填写姓名');
+        return;
+      }
+
       this.isDownloading = true
       const url = await domtoimage.toJpeg(
         document.getElementById('poster-preview')

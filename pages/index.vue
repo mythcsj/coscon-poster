@@ -7,16 +7,16 @@
         element-loading-text="生成海报中"
         element-loading-background="rgba(0, 0, 0, 0.8)"
       >
-        <h1>COSCon 2021 海报生成器（版本：{{ getVersion }}）</h1>
+        <h1>开源市集 海报生成器（版本：{{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
             <el-tab-pane label="论坛信息">
               <el-form-item id="track" label="论坛名称">
                 <el-input v-model="forumName" />
               </el-form-item>
-              <el-form-item label="论坛口号"
+              <!-- <el-form-item label="论坛口号"
                 ><el-input v-model="forumSlogon"
-              /></el-form-item>
+              /></el-form-item> -->
               <el-form-item label="论坛详情"
                 ><el-input v-model="forumDetail"
               /></el-form-item>
@@ -106,11 +106,10 @@
     <div class="copy-right">
       <small>
         <i class="el-icon-service"></i> 本工具由
-        <a href="http://github.com/Ovilia">@Ovilia</a> 开发，<a
-          href="http://github.com/dz85"
-          >@David Z.</a
-        >
-        重构/修改，<a href="mailto:geek@lzw.name">问题反馈</a>
+        <a href="http://github.com/Ovilia">@Ovilia</a> 开发，
+        <a href="http://github.com/dz85">@David Z.</a> 重构/修改，
+        <a href="http://github.com/mythcsj">@mythcsj</a> 优化，
+        <a href="mailto:geek@lzw.name">问题反馈</a>
       </small>
     </div>
   </div>
@@ -133,23 +132,20 @@ Vue.use(AsyncComputed)
 export default Vue.extend({
   data() {
     return {
-      forumName: '2021中国开源年会',
-      forumSlogon: 'Happy Hacking',
-      forumDetail: '10月30日 - 10月31日 成都·北京·上海·线上',
+      forumName: '开源市集',
+      forumSlogon: 'Open Source Bazaar',
+      forumDetail: '2022年3月5日 成都·线上',
       memberAvatarUrl: '',
-      memberRole: '开源社2021届成员',
+      memberRole: '共创者',
       memberName: '姓名',
       topicTitle: '这是一个很神秘的主题',
-      topicSlogon: '开源社邀请您来一起开心快乐开源',
-      topicDetail: `## 大会论坛
-Keynote 主题演讲、人工智能、区块链、云计算、大数据
-开源硬件、操作系统、Web 应用开发、开源教育、开源治理
-女性论坛、开源百宝箱、开源公益、开源社区、开源文化
-开源商业
+      topicSlogon: '开源市集邀请您来一起共创',
+      topicDetail: `## 开源市集
+学生科创项目展示、惩罚十块诗社、Emotional交互艺术展、Web 原生组件引擎 WebCell、freeCodeCamp、极狐 GitLab等宝藏展位
 
 ## 社区活动
 城市聚会、特色活动、开源·真·黑客马拉松、开源市集
-汉服主题、小吃走廊、开源读书会、人找事事找人
+汉服主题、小吃走廊、开源读书会等精彩活动
 `,
       qr: 'https://www.bagevent.com/event/7685233',
 
@@ -436,12 +432,12 @@ p {
         .member-avatar-mask,
         .member-avatar {
           font-size: 1em;
-          width: 128px;
-          height: 128px;
+          width: 150px;
+          height: 150px;
           // max-width: 128px;
-          border: 0.3em solid #ff7353;
+          border: 0.3em solid #151617;
           border-radius: 50%;
-          background: #ffa91b;
+          background: #B6E0B9;
           object-fit: cover;
 
           // &:after {

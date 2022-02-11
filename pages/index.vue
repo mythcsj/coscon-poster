@@ -138,7 +138,7 @@ export default Vue.extend({
     return {
       forumName: '开源市集',
       forumSlogon: 'Open Source Bazaar',
-      forumDetail: '2022年3月5日 成都·线上',
+      forumDetail: '2022年3月5日 成都·高新·菁蓉汇',
       memberAvatarUrl: '',
       memberRole: '共创者',
       memberName: '姓名',
@@ -148,8 +148,7 @@ export default Vue.extend({
 开源软硬件项目展、学生科创项目展、Emotional 交互艺术展、音乐表演和互动、诗社作品展、播客访谈、开放麦克风、开缘树下你和我
 
 ## 社区活动
-城市聚会、特色活动、开源·真·黑客马拉松、开源市集
-汉服主题、小吃走廊、开源读书会等精彩活动
+不定期举办的线下市集、在固定空间长期展示开源市集、不定期直播或录制播客、与各个领域的合作伙伴联合组织活动
 `,
       qr: 'https://www.bagevent.com/event/7685233',
       track: '',

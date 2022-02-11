@@ -2,7 +2,7 @@ name: CI & CD
 on:
     push:
         branches:
-            - coscon2021
+            - dev20220209
 jobs:
     Build-and-Deploy:
         runs-on: ubuntu-latest

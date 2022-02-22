@@ -377,7 +377,7 @@ p {
       }
 
       .member-name{
-        margin-top: 50px;
+        margin-top: 60px;
       }
       .header {
         font-size: 1em;
@@ -438,7 +438,7 @@ p {
       }
       .content {
         font-size: 1em;
-        height: 88%;
+        height: 89%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -448,7 +448,7 @@ p {
         .member-avatar-mask,
         .member-avatar {
           margin-top: 98px;
-          margin-right: 13px;
+          margin-right: 11px;
           font-size: 1em;
           width: 250px;
           height: 250px;

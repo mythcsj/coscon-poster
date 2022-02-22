@@ -10,17 +10,17 @@
         <h1>开源市集 海报生成器（版本：{{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
-            <!-- <el-tab-pane label="论坛信息">
+            <el-tab-pane label="论坛信息">
               <el-form-item id="track" label="论坛名称">
                 <el-input v-model="forumName" />
               </el-form-item>
-              <el-form-item label="论坛口号"
+              <!-- <el-form-item label="论坛口号"
                 ><el-input v-model="forumSlogon"
-              /></el-form-item> 
+              /></el-form-item> -->
               <el-form-item label="论坛详情"
                 ><el-input v-model="forumDetail"
               /></el-form-item>
-            </el-tab-pane> -->
+            </el-tab-pane>
 
             <el-tab-pane label="成员信息">
               <el-form-item
@@ -41,15 +41,15 @@
                   <i v-else class="el-icon-plus member-avatar-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <!-- <el-form-item label="成员角色"
+              <el-form-item label="成员角色"
                 ><el-input v-model="memberRole"
-              /></el-form-item> -->
+              /></el-form-item>
               <el-form-item label="成员姓名">
                 <el-input v-model="memberName" />
               </el-form-item>
             </el-tab-pane>
 
-            <!-- <el-tab-pane label="演讲信息">
+            <el-tab-pane label="演讲信息">
               <el-form-item label="演讲标题">
                 <el-input v-model="topicTitle" />
               </el-form-item>
@@ -65,7 +65,7 @@
               <el-form-item label="报名链接（请输入url自动生成报名二维码）"
                 ><el-input v-model="qr"
               /></el-form-item>
-            </el-tab-pane> -->
+            </el-tab-pane>
 
             <el-form-item>
               <el-button type="primary" @click="download()">
@@ -76,14 +76,14 @@
         </el-form>
       </div>
       <div id="poster-preview">
-        <!-- <div class="header"> -->
-          <!-- <div class="forum-banner"> -->
-            <!-- <h1 class="forum-name">{{ forumName }}</h1> -->
-            <!-- <h2 class="forum-slogon">{{ forumSlogon }}</h2> -->
-            <!-- <small class="forum-detail">{{ forumDetail }}</small> -->
-          <!-- </div> -->
-          <!-- <div class="logo"></div> -->
-        <!-- </div> -->
+        <div class="header">
+          <div class="forum-banner">
+            <h1 class="forum-name">{{ forumName }}</h1>
+            <h2 class="forum-slogon">{{ forumSlogon }}</h2>
+            <small class="forum-detail">{{ forumDetail }}</small>
+          </div>
+          <div class="logo"></div>
+        </div>
         <div class="content">
           <img
             v-if="memberAvatarUrl"
@@ -91,20 +91,20 @@
             :src="memberAvatarUrl"
           />
           <div v-else class="member-avatar"></div>
-          <!-- <h2 class="member-role">{{ memberRole }}</h2> -->
+          <h2 class="member-role">{{ memberRole }}</h2>
           <h1 class="member-name">{{ memberName }}</h1>
-          <!-- <h2 class="topic-title">{{ topicTitle }}</h2> -->
-          <!-- <h2 class="topic-slogon">{{ topicSlogon }}</h2> -->
-          <!-- <div class="topic-detail" v-html="getMd"></div> -->
+          <h2 class="topic-title">{{ topicTitle }}</h2>
+          <h2 class="topic-slogon">{{ topicSlogon }}</h2>
+          <div class="topic-detail" v-html="getMd"></div>
         </div>
-        <!-- <div v-if="getQr" class="footer">
+        <div v-if="getQr" class="footer">
           <img :src="getQr" />
           <small >扫描二维码报名参会</small>
         </div>
         <div v-else class="footer">
           <img src="~@/assets/404.png"/>
           <small>报名二维码还在准备中……</small>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="copy-right">
@@ -136,11 +136,11 @@ Vue.use(AsyncComputed)
 export default Vue.extend({
   data() {
     return {
-      // forumName: '开源市集',
-      // forumSlogon: 'Open Source Bazaar',
-      // forumDetail: '2022年3月5日 成都·高新·菁蓉汇',
+      forumName: '开源市集',
+      forumSlogon: 'Open Source Bazaar',
+      forumDetail: '2022年3月5日 成都·高新·菁蓉汇',
       memberAvatarUrl: '',
-      // memberRole: '共创者',
+      memberRole: '共创者',
       memberName: '姓名',
       topicTitle: '这是一个很好玩的活动',
       topicSlogon: '『开源市集』邀请您来一起共创',
@@ -270,15 +270,15 @@ export default Vue.extend({
   src: url(~assets/SourceHanSerifSC-Heavy.otf) format('opentype');
 }
 
-// h1 {
-  // display: block;
-  // margin-block-start: 0.3em;
-  // margin-block-end: 0.3em;
-  // margin-inline-start: 0px;
-  // margin-inline-end: 0px;
-  // font-size: 1.8em;
-  // font-weight: bold;
-// }
+h1 {
+  display: block;
+  margin-block-start: 0.3em;
+  margin-block-end: 0.3em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 1.8em;
+  font-weight: bold;
+}
 
 h2 {
   display: block;
@@ -376,9 +376,6 @@ p {
         display: flex;
       }
 
-      .member-name{
-        margin-top: 50px;
-      }
       .header {
         font-size: 1em;
         justify-content: space-between;
@@ -438,7 +435,7 @@ p {
       }
       .content {
         font-size: 1em;
-        height: 88%;
+        height: 60%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -447,13 +444,11 @@ p {
 
         .member-avatar-mask,
         .member-avatar {
-          margin-top: 98px;
-          margin-right: 13px;
           font-size: 1em;
-          width: 250px;
-          height: 250px;
+          width: 150px;
+          height: 150px;
           // max-width: 128px;
-          // border: 0.3em solid #151617;
+          border: 0.3em solid #151617;
           border-radius: 50%;
           background: #B6E0B9;
           object-fit: cover;
